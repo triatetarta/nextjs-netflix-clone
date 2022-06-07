@@ -1,8 +1,11 @@
 import axios from "axios";
 import Head from "next/head";
+import { useDispatch, useSelector } from "react-redux";
 import Header from "../components/Header";
+import Modal from "../components/Modal";
 import MovieRow from "../components/MovieRow";
 import Showcase from "../components/Showcase";
+import useAuth from "../hooks/useAuth";
 import requests from "../utils/api";
 
 const Home = ({
@@ -15,6 +18,13 @@ const Home = ({
   romanceMovies,
   documentaries,
 }) => {
+  const { user, loading } = useAuth();
+  const { modalOpen } = useSelector((state) => state.modal);
+
+  const dispatch = useDispatch();
+
+  if (!user || loading) return null;
+
   return (
     <div className='relative h-screen bg-gradient-to-b lg:h-[140vh]'>
       <Head>
@@ -40,7 +50,7 @@ const Home = ({
           <MovieRow title='Documentaries' movies={documentaries} />
         </section>
       </main>
-      {/* Modal */}
+      {modalOpen && <Modal />}
     </div>
   );
 };

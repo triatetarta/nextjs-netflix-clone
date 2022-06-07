@@ -3,9 +3,13 @@ import { baseUrl } from "../constants/movie";
 import { InformationCircleIcon } from "@heroicons/react/outline";
 import { FaPlay } from "react-icons/fa";
 import Image from "next/image";
+import { useDispatch } from "react-redux";
+import { setCurrentMovie, setModalOpen } from "../redux/modalSlice";
 
 const Showcase = ({ netflixOriginals }) => {
   const [movie, setMovie] = useState(null);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setMovie(
@@ -36,7 +40,13 @@ const Showcase = ({ netflixOriginals }) => {
           Play
         </button>
 
-        <button className='showcaseButton bg-[gray]/70'>
+        <button
+          onClick={() => {
+            dispatch(setCurrentMovie(movie));
+            dispatch(setModalOpen());
+          }}
+          className='showcaseButton bg-[gray]/70'
+        >
           <InformationCircleIcon className='h-5 w-5 md:h-8 md:w-8' /> More Info
         </button>
       </div>
