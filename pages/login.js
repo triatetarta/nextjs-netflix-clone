@@ -7,8 +7,8 @@ import Loader from "../components/Loader";
 
 const Login = () => {
   const [login, setLogin] = useState(true);
-  const [loading, setLoading] = useState(false);
-  const { signIn, signUp } = useAuth();
+
+  const { signIn, signUp, loading, error } = useAuth();
 
   const {
     register,
@@ -20,7 +20,6 @@ const Login = () => {
   const password = watch("password");
 
   const onSubmit = async (data) => {
-    setLoading(true);
     if (login) {
       await signIn(data.email, data.password);
     } else {
@@ -103,6 +102,12 @@ const Login = () => {
                 </p>
               )}
             </label>
+          )}
+
+          {login && error !== null && (
+            <p className='p-1 text-[13px] font-light text-orange-500'>
+              {error}
+            </p>
           )}
         </div>
 

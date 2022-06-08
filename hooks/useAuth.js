@@ -32,7 +32,6 @@ export const AuthProvider = ({ children }) => {
           setLoading(false);
         } else {
           setUser(null);
-          setLoading(true);
           router.push("/login");
         }
         setInitialLoading(false);
@@ -49,7 +48,9 @@ export const AuthProvider = ({ children }) => {
         router.push("/");
         setLoading(false);
       })
-      .catch((error) => console.log(error.message))
+      .catch((error) => {
+        setError(error.message);
+      })
       .finally(() => setLoading(false));
   };
 
@@ -61,7 +62,7 @@ export const AuthProvider = ({ children }) => {
         router.push("/");
         setLoading(false);
       })
-      .catch((error) => console.log(error.message))
+      .catch((error) => setError(error.message))
       .finally(() => setLoading(false));
   };
 
@@ -72,7 +73,7 @@ export const AuthProvider = ({ children }) => {
       .then(() => {
         setUser(null);
       })
-      .catch((error) => console.log(error.message))
+      .catch((error) => setError(error.message))
       .finally(() => setLoading(false));
   };
 

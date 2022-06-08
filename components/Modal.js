@@ -21,7 +21,7 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const Modal = () => {
   const { currentMovie } = useSelector((state) => state.modal);
@@ -132,7 +132,6 @@ const Modal = () => {
   return (
     <div className='!z-50 fixed top-0 left-0 right-0 bottom-0 bg-black/50'>
       <div className='!z-50 mx-auto !top-7 w-full max-w-[850px] overflow-hidden overflow-y-scroll rounded-md scrollbar-hide relative'>
-        <Toaster position='bottom-center' />
         <button
           onClick={handleClose}
           className='absolute right-5 top-5 !z-50 h-9 w-9 border-none rounded-full bg-[#181818]'

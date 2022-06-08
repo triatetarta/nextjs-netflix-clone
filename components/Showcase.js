@@ -18,7 +18,7 @@ const Showcase = ({ netflixOriginals }) => {
   }, [netflixOriginals]);
 
   return (
-    <div className='flex flex-col space-y-2 py-16 md:space-y-4 lg:h-[65vh] lg:justify-end lg:pb-12'>
+    <div className='flex flex-col space-y-3 py-16 md:space-y-6 lg:h-[65vh] lg:justify-end lg:pb-12'>
       <div className='absolute top-0 left-0 -z-10 h-[95vh] w-full'>
         <Image
           layout='fill'
@@ -31,7 +31,7 @@ const Showcase = ({ netflixOriginals }) => {
       <h1 className='text-2xl font-bold md:text-4xl lg:text-7xl'>
         {movie?.title || movie?.name || movie?.original_name}
       </h1>
-      <p className='max-w-xs text-xs text-shadow-md md:max-w-lg md:text-lg lg:max-w-2xl lg:text-2xl'>
+      <p className='max-w-xs text-xs text-shadow-md md:max-w-lg md:text-lg lg:max-w-2xl lg:text-2xl line-clamp-3'>
         {movie?.overview}
       </p>
       <div className='flex space-x-3'>
