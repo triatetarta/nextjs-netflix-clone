@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { BellIcon, SearchIcon } from "@heroicons/react/solid";
+import { BellIcon, SearchIcon, ChevronDownIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenu, setMobileMenu] = useState(false);
 
   const handleScroll = () => {
     if (window.scrollY > 0) {
@@ -32,6 +33,30 @@ const Header = () => {
           className='cursor-pointer object-contain z-40'
         />
 
+        <div className='menu'>
+          <button
+            className='ml-2 text-sm flex items-center'
+            onClick={() => setMobileMenu(!mobileMenu)}
+          >
+            Browse
+            <ChevronDownIcon className='h-5 w-5 ml-1' />
+          </button>
+          {mobileMenu && (
+            <ul className='menuUl'>
+              <div
+                className='absolute -top-[16px] left-1/2 border-[7px] h-0 w-0'
+                style={{ borderColor: "transparent transparent #e5e5e5" }}
+              />
+              <div className='absolute -top-[2px] left-0 right-0 h-[2px] bg-[#e5e5e5]' />
+              <li className='menuItemLi'>Home</li>
+              <li className='menuItemLi'>TV Shows</li>
+              <li className='menuItemLi'>Movies</li>
+              <li className='menuItemLi'>New & Popular</li>
+              <li className='menuItemLi'>My List</li>
+            </ul>
+          )}
+        </div>
+
         <ul className='hidden space-x-4 md:flex'>
           <li className='navLink'>Home</li>
           <li className='navLink'>TV Shows</li>
@@ -41,10 +66,10 @@ const Header = () => {
         </ul>
       </div>
 
-      <div className='flex items-center space-x-4 text-sm font-light'>
-        <SearchIcon className='sm hidden h-6 w-6 sm:inline' />
-        <p className='hidden lg:inline'>Children</p>
-        <BellIcon className='h-6 w-6' />
+      <div className='flex items-center space-x-4 text-sm font-medium'>
+        <SearchIcon className='sm hidden h-6 w-6 sm:inline cursor-pointer' />
+        <p className='hidden lg:inline cursor-pointer'>Children</p>
+        <BellIcon className='h-6 w-6 cursor-pointer' />
         <Link href='/account'>
           <img
             src='/assets/profile.png'

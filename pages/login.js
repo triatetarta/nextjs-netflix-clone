@@ -3,9 +3,11 @@ import Head from "next/head";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import useAuth from "../hooks/useAuth";
+import Loader from "../components/Loader";
 
 const Login = () => {
   const [login, setLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
   const { signIn, signUp } = useAuth();
 
   const {
@@ -15,7 +17,10 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
+  const password = watch("password");
+
   const onSubmit = async (data) => {
+    setLoading(true);
     if (login) {
       await signIn(data.email, data.password);
     } else {
@@ -77,14 +82,41 @@ const Login = () => {
               </p>
             )}
           </label>
+
+          {!login && (
+            <label className='inline-block w-full'>
+              <input
+                type='password'
+                placeholder='Confirm Password'
+                className={`input ${
+                  errors.password && "border-b-2 border-orange-500"
+                }`}
+                {...register("confirmPassword", {
+                  required: true,
+                  validate: (value) =>
+                    value === password || "The passwords do not match",
+                })}
+              />
+              {errors.confirmPassword && (
+                <p className='p-1 text-[13px] font-light text-orange-500'>
+                  The passwords do not match.
+                </p>
+              )}
+            </label>
+          )}
         </div>
 
         <button
+          disabled={loading}
           onClick={handleSubmit(onSubmit)}
           className='w-full rounded bg-[#E50914] py-3 font-semibold'
           type='submit'
         >
-          {`${login ? "Sign In" : "Sign up now"}`}
+          {loading ? (
+            <Loader color='dark:fill-gray-300' />
+          ) : (
+            <>{`${login ? "Sign In" : "Sign up now"}`}</>
+          )}
         </button>
 
         <div className='text-[gray]'>

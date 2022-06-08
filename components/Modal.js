@@ -13,6 +13,15 @@ import ReactPlayer from "react-player/lazy";
 import useAuth from "../hooks/useAuth";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  setDoc,
+} from "firebase/firestore";
+import { db } from "../firebase";
+import toast, { Toaster } from "react-hot-toast";
 
 const Modal = () => {
   const { currentMovie } = useSelector((state) => state.modal);
@@ -25,9 +34,20 @@ const Modal = () => {
 
   const dispatch = useDispatch();
 
+  const toastStyle = {
+    background: "white",
+    color: "black",
+    fontWeight: "bold",
+    fontSize: "16px",
+    padding: "15px",
+    borderRadius: "9999px",
+    maxWidth: "1000px",
+  };
+
   const handleClose = () => {
     dispatch(setModalClose());
     dispatch(setCurrentMovie(null));
+    toast.dismiss();
   };
 
   const fetchMovie = async () => {
@@ -56,9 +76,63 @@ const Modal = () => {
     fetchMovie();
   }, [currentMovie]);
 
+  useEffect(() => {
+    if (user) {
+      return onSnapshot(
+        collection(db, "customers", user.uid, "myList"),
+        (snapshot) => setMovies(snapshot.docs)
+      );
+    }
+  }, [db, currentMovie?.id]);
+
+  useEffect(
+    () =>
+      setAddedToList(
+        movies.findIndex((result) => result.data().id === currentMovie?.id) !==
+          -1
+      ),
+    [movies]
+  );
+
+  const handleList = async () => {
+    if (addedToList) {
+      await deleteDoc(
+        doc(db, "customers", user?.uid, "myList", currentMovie?.id.toString())
+      );
+
+      toast(
+        `${
+          currentMovie?.title || currentMovie?.original_name
+        } has been removed from My List`,
+        {
+          duration: 8000,
+          style: toastStyle,
+        }
+      );
+    } else {
+      await setDoc(
+        doc(db, "customers", user?.uid, "myList", currentMovie?.id.toString()),
+        {
+          ...currentMovie,
+        }
+      );
+
+      toast(
+        `${
+          currentMovie?.title || currentMovie?.original_name
+        } has been added to My List.`,
+        {
+          duration: 8000,
+          style: toastStyle,
+        }
+      );
+    }
+  };
+
   return (
     <div className='!z-50 fixed top-0 left-0 right-0 bottom-0 bg-black/50'>
-      <div className='!z-50 mx-auto !top-7 w-full max-w-[850px] overflow-hidden overflow-y-scroll rounded-md scrollbar-hide relative bg-white'>
+      <div className='!z-50 mx-auto !top-7 w-full max-w-[850px] overflow-hidden overflow-y-scroll rounded-md scrollbar-hide relative'>
+        <Toaster position='bottom-center' />
         <button
           onClick={handleClose}
           className='absolute right-5 top-5 !z-50 h-9 w-9 border-none rounded-full bg-[#181818]'
@@ -80,7 +154,7 @@ const Modal = () => {
                 <FaPlay className='h-7 w-7 text-black' />
                 Play
               </button>
-              <button className='modalButton'>
+              <button onClick={handleList} className='modalButton'>
                 {addedToList ? (
                   <CheckIcon className='h-7 w-7' />
                 ) : (
