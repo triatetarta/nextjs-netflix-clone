@@ -1,12 +1,17 @@
 import Head from "next/head";
 import Link from "next/link";
+import { FaCaretDown } from "react-icons/fa";
 import useSubscription from "../hooks/useSubscription";
 import useAuth from "../hooks/useAuth";
 import Membership from "../components/Membership";
 import payments, { goToBillingPortal } from "../lib/stripe";
 import { getProducts } from "@stripe/firestore-stripe-payments";
+import { useState } from "react";
+import { UserIcon } from "@heroicons/react/outline";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Account = ({ products }) => {
+  const [accountMenu, setAccountMenu] = useState(false);
   const { user, logout, loading } = useAuth();
   const subscription = useSubscription(user);
 
@@ -27,13 +32,54 @@ const Account = ({ products }) => {
             className='cursor-pointer object-contain'
           />
         </Link>
-        <Link href='/account'>
-          <img
-            src='/assets/profile.png'
-            alt='account avatar'
-            className='cursor-pointer rounded'
-          />
-        </Link>
+
+        <div
+          onClick={() => setAccountMenu(!accountMenu)}
+          className='flex items-center cursor-pointer'
+        >
+          <img src='/assets/profile.png' alt='avatar' className='rounded' />
+          <motion.div
+            className='w-4 h-4 ml-2 hidden md:inline-flex '
+            initial={{ rotate: 0 }}
+            animate={{ rotate: accountMenu ? 180 : 0 }}
+          >
+            <FaCaretDown className='h-full w-full' />
+          </motion.div>
+        </div>
+
+        <AnimatePresence>
+          {accountMenu && (
+            <motion.ul
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className='accountMenu'
+            >
+              <div
+                className='absolute -top-[16px] right-1 md:right-3 border-[7px] h-0 w-0'
+                style={{ borderColor: "transparent transparent #e5e5e5" }}
+              />
+              <div className='absolute -top-[2px] left-0 right-0 h-[2px] bg-[#e5e5e5]' />
+              <li className='acccountMenuItem'>
+                <img
+                  className='rounded-md mr-3'
+                  src='/assets/kids.png'
+                  alt='kids logo'
+                />
+                Children
+              </li>
+              <Link href='/account'>
+                <li className='acccountMenuItem'>
+                  <UserIcon className='h-6 w-6 text-gray-400 mr-3' />
+                  Account
+                </li>
+              </Link>
+              <li onClick={logout} className='acccountMenuItem'>
+                Sign out of Netflix
+              </li>
+            </motion.ul>
+          )}
+        </AnimatePresence>
       </header>
 
       <main className='mx-auto max-w-6xl px-5 pt-24 pb-12 transition-all md:px-10'>

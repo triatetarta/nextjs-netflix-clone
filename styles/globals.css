@@ -55,10 +55,18 @@
   }
 
   .menuUl {
-    @apply !absolute !left-[37px] !top-16 !rounded-none !border !border-[gray] !bg-black/90 !text-white z-50;
+    @apply !absolute !left-[37px] !top-16 !rounded-none !border !border-[gray] !bg-black/90 !text-white z-50 select-none;
   }
 
   .menuItemLi {
-    @apply !block !w-72 !py-3.5 !text-center !text-sm !font-light !text-[#b3b3b3] !transition !duration-200 cursor-pointer first:!font-normal first:!text-white hover:!bg-[#11100F];
+    @apply !block !w-72 !py-3.5 !text-center !text-sm !font-medium text-[#b3b3b3] !transition !duration-200 cursor-pointer first:!font-normal first:!text-white hover:!bg-[#11100F];
+  }
+
+  .accountMenu {
+    @apply !absolute !right-[21px] md:!right-[37px] lg:!right-[60px] !top-16 md:!top-20 !rounded-none !bg-black/90 !text-white z-50 select-none;
+  }
+
+  .acccountMenuItem {
+    @apply !flex items-center last:justify-center !py-4 px-3 w-[200px] !text-center !text-sm !font-medium !transition !duration-200 cursor-pointer first:!font-normal  hover:underline border-b border-b-gray-500 last:border-none;
   }
 }

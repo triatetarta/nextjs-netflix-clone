@@ -25,12 +25,14 @@ const MovieRow = ({ title, movies }) => {
         {title}
       </h2>
       <div className='group relative md:-ml-2'>
-        <div className='absolute top-0 bottom-0 left-0 px-2 bg-[#141414]/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition overflow-hidden z-40'>
+        <div
+          className={`absolute top-0 bottom-0 left-0 px-2 bg-[#141414]/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition overflow-hidden z-40 ${
+            !isMoved ? "hidden" : ""
+          }`}
+        >
           <ChevronLeftIcon
             onClick={() => onClickHandler("left")}
-            className={`z-40 h-9 w-9 cursor-pointer opacity-0 transition hover:scale-125 group-hover:opacity-100 ${
-              !isMoved ? "hidden" : ""
-            }`}
+            className={`z-40 h-9 w-9 cursor-pointer opacity-0 transition hover:scale-125 group-hover:opacity-100 `}
           />
         </div>
         <div

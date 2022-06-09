@@ -1,10 +1,16 @@
 import { useState, useEffect } from "react";
-import { BellIcon, SearchIcon, ChevronDownIcon } from "@heroicons/react/solid";
+import { BellIcon, SearchIcon } from "@heroicons/react/solid";
+import { UserIcon } from "@heroicons/react/outline";
+import { FaCaretDown } from "react-icons/fa";
 import Link from "next/link";
+import useAuth from "../hooks/useAuth";
+import { AnimatePresence, motion } from "framer-motion";
 
 const Header = () => {
+  const { logout } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenu, setMobileMenu] = useState(false);
+  const [accountMenu, setAccountMenu] = useState(false);
 
   const handleScroll = () => {
     if (window.scrollY > 0) {
@@ -39,22 +45,29 @@ const Header = () => {
             onClick={() => setMobileMenu(!mobileMenu)}
           >
             Browse
-            <ChevronDownIcon className='h-5 w-5 ml-1' />
+            <FaCaretDown className='h-5 w-5 ml-1' />
           </button>
-          {mobileMenu && (
-            <ul className='menuUl'>
-              <div
-                className='absolute -top-[16px] left-1/2 border-[7px] h-0 w-0'
-                style={{ borderColor: "transparent transparent #e5e5e5" }}
-              />
-              <div className='absolute -top-[2px] left-0 right-0 h-[2px] bg-[#e5e5e5]' />
-              <li className='menuItemLi'>Home</li>
-              <li className='menuItemLi'>TV Shows</li>
-              <li className='menuItemLi'>Movies</li>
-              <li className='menuItemLi'>New & Popular</li>
-              <li className='menuItemLi'>My List</li>
-            </ul>
-          )}
+          <AnimatePresence>
+            {mobileMenu && (
+              <motion.ul
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className='menuUl'
+              >
+                <div
+                  className='absolute -top-[16px] left-1/2 border-[7px] h-0 w-0'
+                  style={{ borderColor: "transparent transparent #e5e5e5" }}
+                />
+                <div className='absolute -top-[2px] left-0 right-0 h-[2px] bg-[#e5e5e5]' />
+                <li className='menuItemLi text-white'>Home</li>
+                <li className='menuItemLi'>TV Shows</li>
+                <li className='menuItemLi'>Movies</li>
+                <li className='menuItemLi'>New & Popular</li>
+                <li className='menuItemLi'>My List</li>
+              </motion.ul>
+            )}
+          </AnimatePresence>
         </div>
 
         <ul className='hidden space-x-4 md:flex'>
@@ -70,13 +83,54 @@ const Header = () => {
         <SearchIcon className='sm hidden h-6 w-6 sm:inline cursor-pointer' />
         <p className='hidden lg:inline cursor-pointer'>Children</p>
         <BellIcon className='h-6 w-6 cursor-pointer' />
-        <Link href='/account'>
-          <img
-            src='/assets/profile.png'
-            alt='avatar'
-            className='cursor-pointer rounded'
-          />
-        </Link>
+
+        <div
+          onClick={() => setAccountMenu(!accountMenu)}
+          className='flex items-center cursor-pointer'
+        >
+          <img src='/assets/profile.png' alt='avatar' className='rounded' />
+          <motion.div
+            className='w-4 h-4 ml-2 hidden md:inline-flex '
+            initial={{ rotate: 0 }}
+            animate={{ rotate: accountMenu ? 180 : 0 }}
+          >
+            <FaCaretDown className='h-full w-full' />
+          </motion.div>
+        </div>
+
+        <AnimatePresence>
+          {accountMenu && (
+            <motion.ul
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className='accountMenu'
+            >
+              <div
+                className='absolute -top-[16px] right-1 md:right-3 border-[7px] h-0 w-0'
+                style={{ borderColor: "transparent transparent #e5e5e5" }}
+              />
+              <div className='absolute -top-[2px] left-0 right-0 h-[2px] bg-[#e5e5e5]' />
+              <li className='acccountMenuItem'>
+                <img
+                  className='rounded-md mr-3'
+                  src='/assets/kids.png'
+                  alt='kids logo'
+                />
+                Children
+              </li>
+              <Link href='/account'>
+                <li className='acccountMenuItem'>
+                  <UserIcon className='h-6 w-6 text-gray-400 mr-3' />
+                  Account
+                </li>
+              </Link>
+              <li onClick={logout} className='acccountMenuItem'>
+                Sign out of Netflix
+              </li>
+            </motion.ul>
+          )}
+        </AnimatePresence>
       </div>
     </header>
   );
