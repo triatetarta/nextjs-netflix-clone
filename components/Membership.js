@@ -3,6 +3,7 @@ import useAuth from "../hooks/useAuth";
 import useSubscription from "../hooks/useSubscription";
 import { goToBillingPortal } from "../lib/stripe";
 import Loader from "./Loader";
+import moment from "moment";
 
 const Membership = () => {
   const { user } = useAuth();
@@ -51,7 +52,7 @@ const Membership = () => {
               {subscription?.cancel_at_period_end
                 ? "Your membership will end on "
                 : "Your next billing date is "}
-              {subscription?.current_period_end}
+              {moment(subscription?.current_period_end).format("LL")}
             </p>
           </div>
           <div className='md:text-right'>

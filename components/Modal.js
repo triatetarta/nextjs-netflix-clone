@@ -22,6 +22,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 const Modal = () => {
   const { currentMovie } = useSelector((state) => state.modal);
@@ -130,7 +131,12 @@ const Modal = () => {
   };
 
   return (
-    <div className='!z-50 fixed top-0 left-0 right-0 bottom-0 bg-black/50'>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className='!z-50 fixed top-0 left-0 right-0 bottom-0 bg-black/50'
+    >
       <div className='!z-50 mx-auto !top-7 w-full max-w-[850px] overflow-hidden overflow-y-scroll rounded-md scrollbar-hide relative'>
         <button
           onClick={handleClose}
@@ -208,7 +214,7 @@ const Modal = () => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

@@ -1,5 +1,6 @@
 import { getProducts } from "@stripe/firestore-stripe-payments";
 import axios from "axios";
+import { AnimatePresence } from "framer-motion";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -33,7 +34,7 @@ const Home = ({
 
   useEffect(() => {
     if (modalOpen) {
-      setScrollStyle("overflow-hidden");
+      setScrollStyle("!overflow-hidden");
     }
     if (!modalOpen) {
       setScrollStyle("");
@@ -71,7 +72,8 @@ const Home = ({
           <MovieRow title='Documentaries' movies={documentaries} />
         </section>
       </main>
-      {modalOpen && <Modal />}
+
+      <AnimatePresence>{modalOpen && <Modal />}</AnimatePresence>
     </div>
   );
 };

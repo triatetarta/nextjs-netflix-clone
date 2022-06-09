@@ -9,6 +9,7 @@ import { getProducts } from "@stripe/firestore-stripe-payments";
 import { useState } from "react";
 import { UserIcon } from "@heroicons/react/outline";
 import { motion, AnimatePresence } from "framer-motion";
+import moment from "moment";
 
 const Account = ({ products }) => {
   const [accountMenu, setAccountMenu] = useState(false);
@@ -88,7 +89,7 @@ const Account = ({ products }) => {
           <div className='-ml-0.5 flex items-center gap-x-1.5'>
             <img src='https://rb.gy/4vfk4r' alt='' className='h-7 w-7' />
             <p className='text-xs font-semibold text-[#555]'>
-              Member since {subscription?.created}
+              Member since {moment(subscription.created).format("LL")}
             </p>
           </div>
         </div>
